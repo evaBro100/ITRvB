@@ -1,0 +1,17 @@
+{
+    "name": "evakharchenko/lab3",
+    "autoload": {
+        "psr-4": {
+            "lab3\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "evaBro100",
+            "email": "kharchenko.eva@gmail.com"
+        }
+    ],
+    "require": {
+        "fakerphp/faker": "^1.23"
+    }
+}
