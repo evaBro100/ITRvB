@@ -1,120 +1,62 @@
 <?php
 
-//классы интернет-магазина
-class Product {
-    public $id;
-    public $name;
-    public $price;
-    public $description;
-    public $category;
-    public $stock;
+abstract class Product
+{
+    protected float $basePrice;
 
-    public function changePrice($newPrice) {
-        $this->price = $newPrice;
+    public function __construct(float $basePrice)
+    {
+        $this->basePrice = $basePrice;
     }
 
-    public function updateStock($newStock) {
-        $this->stock = $newStock;
-    }
+    abstract public function calculateFinalPrice(): float;
 
-    public function getShortDescription() {
-        return $this->name . " - " . $this->price . " руб.";
+
+    public function calculateRevenue(): float
+    {
+        return $this->calculateFinalPrice();
     }
 }
 
-class Cart {
-    public $products = [];
-    public $totalPrice = 0;
 
-    public function addProduct(Product $product, $quantity) {
-        $this->products[] = ['product' => $product, 'quantity' => $quantity];
-        $this->totalPrice += $product->price * $quantity;
-    }
+class DigitalProduct extends Product
+{
 
-    public function removeProduct($productId) {
-        foreach ($this->products as $index => $item) {
-            if ($item['product']->id === $productId) {
-                $this->totalPrice -= $item['product']->price * $item['quantity'];
-                unset($this->products[$index]);
-                break;
-            }
-        }
-    }
-
-    public function getTotalPrice() {
-        return $this->totalPrice;
+    public function calculateFinalPrice(): float
+    {
+        return $this->basePrice / 2;
     }
 }
 
-class Review {
-    public $productId;
-    public $userId;
-    public $rating;
-    public $comment;
+class PhysicalProduct extends Product
+{
+    private int $quantity;
 
-    public function getSummary() {
-        return "Оценка: " . $this->rating . " | Комментарий: " . substr($this->comment, 0, 50) . "...";
+    public function __construct(float $basePrice, int $quantity)
+    {
+        parent::__construct($basePrice);
+        $this->quantity = $quantity;
+    }
+
+    public function calculateFinalPrice(): float
+    {
+        return $this->basePrice * $this->quantity;
     }
 }
 
-class User {
-    public $id;
-    public $name;
-    public $email;
-    public $isAdmin;
 
-    public function getUserInfo() {
-        return "Имя: " . $this->name . " | Email: " . $this->email;
+class WeightBasedProduct extends Product
+{
+    private float $weight;
+
+    public function __construct(float $basePrice, float $weight)
+    {
+        parent::__construct($basePrice);
+        $this->weight = $weight;
+    }
+
+    public function calculateFinalPrice(): float
+    {
+        return $this->basePrice * $this->weight;
     }
 }
-
-class ContactForm {
-    public $name;
-    public $email;
-    public $message;
-
-    public function validate() {
-        return !empty($this->name) && filter_var($this->email, FILTER_VALIDATE_EMAIL) && !empty($this->message);
-    }
-
-    public function send() {
-        if ($this->validate()) {
-            return "Сообщение отправлено!";
-        } else {
-            return "Ошибка валидации данных формы.";
-        }
-    }
-}
-
-//наследование
-class Customer extends User {
-    public $purchaseHistory = [];
-    public $cart;
-
-    public function addPurchase($product) {
-        $this->purchaseHistory[] = $product;
-    }
-
-    public function viewPurchaseHistory() {
-        return $this->purchaseHistory;
-    }
-
-    public function addReview(Product $product, $rating, $comment) {
-        return new Review($product->id, $this->id, $rating, $comment);
-    }
-}
-
-class AdminUser extends User {
-    public function addProduct($id, $name, $price, $description, $category, $stock) {
-        return new Product($id, $name, $price, $description, $category, $stock);
-    }
-
-    public function deleteProduct($productId) {
-        return "Продукт с ID " . $productId . " удален.";
-    }
-
-    public function manageUsers() {
-        return "Управление пользователями доступно.";
-    }
-}
-?>
