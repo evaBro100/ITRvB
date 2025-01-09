@@ -1,19 +1,34 @@
 <?php
 
-class Comment {
-    private string $uuid;
-    private string $postUuid;
-    private string $authorUuid;
-    private string $text;
+namespace App;
 
-    public function __construct(string $uuid, string $postUuid, string $authorUuid, string $text) {
-        $this->uuid = $uuid;
-        $this->postUuid = $postUuid;
-        $this->authorUuid = $authorUuid;
-        $this->text = $text;
+class Comment
+{
+    public function __construct(
+        private UUID $uuid,
+        private UUID $postUuid,
+        private UUID $authorUuid,
+        private string $text
+    ) {
     }
-    
-    public function getUuid(): string {
+
+    public function getUuid(): UUID
+    {
         return $this->uuid;
+    }
+
+    public function getPostUuid(): UUID
+    {
+        return $this->postUuid;
+    }
+
+    public function getAuthorUuid(): UUID
+    {
+        return $this->authorUuid;
+    }
+
+    public function getContent(): string
+    {
+        return $this->text;
     }
 }

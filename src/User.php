@@ -1,19 +1,40 @@
 <?php
 
-class User {
-    private string $uuid;
-    private string $username;
-    private string $firstName;
-    private string $lastName;
+namespace App;
 
-    public function __construct(string $uuid, string $username, string $firstName, string $lastName) {
-        $this->uuid = $uuid;
-        $this->username = $username;
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
+class User
+{
+    public function __construct(
+        private UUID $uuid,
+        private UUID $authorUuid,
+        private string $nickname,
+        private string $firstName,
+        private string $lastName
+    ) {
     }
-    
-    public function getUuid(): string {
+
+    public function getUuid(): UUID
+    {
         return $this->uuid;
+    }
+
+    public function getAuthorUuid(): UUID
+    {
+        return $this->authorUuid;
+    }
+
+    public function getNickname(): string
+    {
+        return $this->nickname;
+    }
+
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    public function getLastName(): string
+    {
+        return $this->lastName;
     }
 }

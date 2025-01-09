@@ -1,19 +1,34 @@
-<?php 
+<?php
 
-class Post {
-    private string $uuid;
-    private string $authorUuid;
-    private string $title;
-    private string $text;
+namespace App;
 
-    public function __construct(string $uuid, string $authorUuid, string $title, string $text) {
-        $this->uuid = $uuid;
-        $this->authorUuid = $authorUuid;
-        $this->title = $title;
-        $this->text = $text;
+class Post
+{
+    public function __construct(
+        private UUID $uuid,
+        private UUID $authorUuid,
+        private string $title,
+        private string $text
+    ) {
     }
-    
-    public function getUuid(): string {
+
+    public function getUuid(): UUID
+    {
         return $this->uuid;
+    }
+
+    public function getAuthorUuid(): UUID
+    {
+        return $this->authorUuid;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function getContent(): string
+    {
+        return $this->text;
     }
 }
